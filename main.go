@@ -7,7 +7,7 @@ import (
 
 func main()  {
 	conf := &config.Config{}
-	rounter := rounters.NewRounter(conf)
-	app, _ := rounter.InitGin()
+	router := rounters.NewRouter(conf)
+	app, _ := router.InitGin()
 	app.Run(":8080")
 }

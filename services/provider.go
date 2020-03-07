@@ -6,6 +6,7 @@ import (
 
 type Provider interface {
 	GetUserService() UserService
+	GetAnalysisService() AnalysisService
 }
 
 type providerImpl struct {
@@ -14,6 +15,10 @@ type providerImpl struct {
 
 func (provider *providerImpl) GetUserService() UserService {
 	return NewUserService(provider.config)
+}
+
+func (provider *providerImpl) GetAnalysisService() AnalysisService {
+	return NewAnalysisService()
 }
 
 func NewProvider(conf *config.Config) Provider {

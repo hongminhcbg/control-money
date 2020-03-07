@@ -26,8 +26,13 @@
     
     response:
         {
-            "message":"success",
-            "tocken":"xxx"
+            "data": {
+                "tocken":"xxx"                
+            },
+            "meta_data": {
+                "code": "200",
+                "message":"success"
+            }
         }
 
 # /api/v1/log
@@ -47,12 +52,27 @@
     auth: tocken
     response:
     {
-        "tag1": 100,
-        "tag2": 100,
-        "tag3": 100,
-        .
-        .
-        .
+        "data": [
+            {
+                "tag":"tag1",
+                "money": 100
+            },
+            {
+                "tag":"tag2",
+                "money": 100
+            },
+            {
+                "tag":"tag3",
+                "money": 100
+            },
+            .
+            .
+            .
+        ],
+        "meta_data": {
+            "code": "200",
+            "message": "success"
+        }
     }
     
 # /api/v1/analysis/day?begin=123&end=456
@@ -61,12 +81,31 @@
     auth: tocken
     response:
     {
-        "yyyy-mm-dd": 100,
-        "yyyy-mm-dd": 100,
-        "yyyy-mm-dd": 100,
-        .
-        .
-        .
+        "data": [
+            {
+                "day": "yyyy-mm-dd",
+                "money": 100
+            },
+            {
+                "day": "yyyy-mm-dd",
+                "money": 100
+            },
+            {
+                "day": "yyyy-mm-dd",
+                "money": 100
+            },
+            {
+                "day": "yyyy-mm-dd",
+                "money": 100
+            },
+            .
+            .
+            .
+        ],
+        "meta_data": {
+            "code": "200",
+            "message":"success"
+        }        
     }
 
 # /api/v1/average?month=1
@@ -76,7 +115,11 @@
     auth: tocken
     response:
         {
-            "average": 100
+            "data":{
+                "average": 100
+            },
+            "meta_data": {
+                "code": "200",
+                "message":"success"
+            }
         }
-    
-    

@@ -1,6 +1,13 @@
 package models
+
+import "time"
+
 type User struct {
-	Name string
-	Money int64
-	Password string
+	ID       int64  `gorm:"column:id;PRIMARY_KEY"`
+	Name     string `gorm:"column:name"`
+	Username string `gorm:"column:username"`
+	Money    int64  `gorm:"column:money"`
+	Password string `gorm:"column:password"`
+	CreateAt *time.Time
+	UpdateAt *time.Time
 }

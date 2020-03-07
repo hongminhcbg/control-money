@@ -1,26 +1,27 @@
 package rounters
 
 import (
-	"github.com/hongminhcbg/control-money/config"
-	"github.com/hongminhcbg/control-money/services"
-	"github.com/hongminhcbg/control-money/controlers"
-
 	"github.com/gin-gonic/gin"
+
+	"github.com/hongminhcbg/control-money/config"
+	"github.com/hongminhcbg/control-money/controlers"
+	"github.com/hongminhcbg/control-money/services"
+
 )
 
-type Rounter struct {
+type Router struct {
 	config *config.Config
 }
 
-func NewRounter(conf *config.Config) Rounter {
-	return Rounter{config:conf,}
+func NewRouter(conf *config.Config) Router {
+	return Router{config: conf,}
 }
 
-func (rounter *Rounter) InitGin() (*gin.Engine, error)  {
-	providerService := services.NewProvider(rounter.config)
-	controler := controlers.NewControler(providerService)
+func (router *Router) InitGin() (*gin.Engine, error)  {
+	providerService := services.NewProvider(router.config)
+	controller := controlers.NewController(providerService)
 
 	engine := gin.Default()
-	engine.GET("/ping", controler.Ping)
+	engine.GET("/ping", controller.Ping)
 	return engine, nil
 }
