@@ -4,6 +4,7 @@ import (
 	"github.com/hongminhcbg/control-money/config"
 	"github.com/hongminhcbg/control-money/daos"
 	"github.com/hongminhcbg/control-money/dtos"
+	"github.com/hongminhcbg/control-money/middlewares"
 	"github.com/hongminhcbg/control-money/models"
 )
 
@@ -17,11 +18,13 @@ type UserService interface {
 type userServiceImpl struct {
 	config  *config.Config
 	userDao daos.UserDao
+	jwt     middlewares.JWT
 }
 
-func NewUserService(conf *config.Config, userDao daos.UserDao) UserService {
+func NewUserService(conf *config.Config, userDao daos.UserDao, jwt middlewares.JWT) UserService {
 	return &userServiceImpl{config: conf,
 		userDao: userDao,
+		jwt:jwt,
 	}
 }
 
@@ -31,11 +34,16 @@ func (service *userServiceImpl) Login(request dtos.LoginRequest) (*dtos.LoginRes
 		return nil, err
 	}
 
+	tocken, err := service.jwt.CreateTocken(user.ID)
+	if err != nil {
+		return nil, err
+	}
+
 	response := dtos.LoginResponse{
 		UserID:   user.ID,
 		Username: user.Username,
 		Name:     user.Name,
-		Tocken:   "",
+		Tocken:   tocken,
 		Money:    user.Money,
 	}
 	return &response, nil

@@ -2,7 +2,9 @@ package rounters
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/hongminhcbg/control-money/utilitys"
 	"github.com/jinzhu/gorm"
+	"github.com/gin-gonic/contrib/jwt"
 
 	"github.com/hongminhcbg/control-money/config"
 	"github.com/hongminhcbg/control-money/controlers"
@@ -30,13 +32,20 @@ func (router *Router) InitGin() (*gin.Engine, error)  {
 	engine.Use(middlewares.CORSMiddleware())
 	engine.GET("/ping", controller.Ping)
 
-	accountAuth := middlewares.CheckAPIKey{ApiKey:router.config.APIKey}
+	accountAuthMiddleWare := middlewares.CheckAPIKey{ApiKey: router.config.APIKey}
 	{
 		account := engine.Group("/api/v1/account")
-		account.Use(accountAuth.Check)
+		account.Use(accountAuthMiddleWare.Check)
 		account.POST("", controller.CreateUser)
+		account.POST("login", controller.Login)
 	}
 
+	{
+		log := engine.Group("/api/v1/log")
+		log.Use(jwt.Auth(router.config.SecretKet))
+		log.Use(middlewares.SetUserID)
+		log.POST("/ping", controller.Ping)
+	}
 
 	return engine, nil
 }

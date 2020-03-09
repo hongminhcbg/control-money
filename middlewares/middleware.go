@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/hongminhcbg/control-money/utilitys"
 )
 
 func CORSMiddleware() gin.HandlerFunc {
@@ -32,4 +33,13 @@ func (client *CheckAPIKey) Check(context *gin.Context) {
 	} else {
 		context.AbortWithStatus(401)
 	}
+}
+
+func SetUserID(context *gin.Context)  {
+	err := utilitys.SetUserID(context)
+	if err != nil {
+		utilitys.Response(context, nil, 401, "parse data error")
+		context.Abort()
+	}
+	context.Next()
 }

@@ -2,9 +2,9 @@ package controlers
 
 import (
 	"github.com/gin-gonic/gin"
+
 	"github.com/hongminhcbg/control-money/dtos"
 	"github.com/hongminhcbg/control-money/models"
-
 	"github.com/hongminhcbg/control-money/services"
 	"github.com/hongminhcbg/control-money/utilitys"
 )
@@ -52,6 +52,10 @@ func (ctl *Controller) CreateUser(context *gin.Context) {
 	} else {
 		utilitys.ResponseSuccess200(context, data, "success")
 	}
+}
+
+func (ctl *Controller) CreateLog(context *gin.Context) {
+
 }
 
 func (ctl *Controller) Ping(context *gin.Context) {

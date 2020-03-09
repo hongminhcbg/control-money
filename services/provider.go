@@ -3,6 +3,7 @@ package services
 import (
 	"github.com/hongminhcbg/control-money/config"
 	"github.com/hongminhcbg/control-money/daos"
+	"github.com/hongminhcbg/control-money/middlewares"
 	"github.com/jinzhu/gorm"
 )
 
@@ -18,7 +19,8 @@ type providerImpl struct {
 
 func (provider *providerImpl) GetUserService() UserService {
 	userDao := daos.NewUserDao(provider.db)
-	return NewUserService(provider.config, userDao)
+	jwtClient := middlewares.NewJWT(provider.config.SecretKet)
+	return NewUserService(provider.config, userDao, jwtClient)
 }
 
 func (provider *providerImpl) GetAnalysisService() AnalysisService {
