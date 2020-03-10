@@ -38,7 +38,7 @@ func (client *CheckAPIKey) Check(context *gin.Context) {
 func SetUserID(context *gin.Context)  {
 	err := utilitys.SetUserID(context)
 	if err != nil {
-		utilitys.Response(context, nil, 401, "parse data error")
+		utilitys.Response(context, nil, 401, "parse userID error: " + err.Error())
 		context.Abort()
 	}
 	context.Next()

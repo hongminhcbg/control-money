@@ -1,16 +1,14 @@
 package rounters
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/hongminhcbg/control-money/utilitys"
-	"github.com/jinzhu/gorm"
 	"github.com/gin-gonic/contrib/jwt"
+	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 
 	"github.com/hongminhcbg/control-money/config"
 	"github.com/hongminhcbg/control-money/controlers"
 	"github.com/hongminhcbg/control-money/middlewares"
 	"github.com/hongminhcbg/control-money/services"
-
 )
 
 type Router struct {
@@ -37,14 +35,21 @@ func (router *Router) InitGin() (*gin.Engine, error)  {
 		account := engine.Group("/api/v1/account")
 		account.Use(accountAuthMiddleWare.Check)
 		account.POST("", controller.CreateUser)
-		account.POST("login", controller.Login)
+		account.POST("/login", controller.Login)
 	}
 
 	{
 		log := engine.Group("/api/v1/log")
 		log.Use(jwt.Auth(router.config.SecretKet))
 		log.Use(middlewares.SetUserID)
-		log.POST("/ping", controller.Ping)
+		log.POST("", controller.CreateLog)
+	}
+
+	{
+		analysis := engine.Group("/api/v1/analysis")
+		analysis.Use(jwt.Auth(router.config.SecretKet))
+		analysis.Use(middlewares.SetUserID)
+		analysis.GET("/tag", controller.AnalysisByTag)
 	}
 
 	return engine, nil

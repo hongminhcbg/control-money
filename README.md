@@ -3,6 +3,8 @@
 # /api/v1/profile
     bref: create user
     method: POST
+    header:
+        api-key:controlnomey-hongminh-229297
     body:
         {
             "username": "xxx",
@@ -18,6 +20,8 @@
 # /api/v1/login
     bref: login to web
     method: POST
+    header:
+        api-key:controlnomey-hongminh-229297
     body:
         {
             "username": "xxx",
@@ -27,7 +31,11 @@
     response:
         {
             "data": {
-                "tocken":"xxx"                
+                "id": 100,
+                "username":"xxx",
+                "tocken":"xxx",
+                "name":"xxx",
+                "money": 100                                
             },
             "meta_data": {
                 "code": "200",
@@ -41,7 +49,7 @@
     auth: tocken
     body:
         {
-            "monney": 123,
+            "money": 123,
             "detail": "an trua",
             "tag":"abc"
         } 
@@ -123,3 +131,13 @@
                 "message":"success"
             }
         }
+## Tag is constant
+    - xăng xe
+    - thức ăn 
+    - tiết kiệm
+    - cho vay
+    - quần áo
+    - tiền nhà
+    - đồ dùng, đồ vệ sinh cá nhân
+    - khác
+    

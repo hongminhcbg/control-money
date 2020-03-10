@@ -13,7 +13,7 @@ import (
 )
 
 type UserIdentity struct {
-	UserID int64
+	UserID int64 `json:"id"`
 }
 
 // RequestHeader request header struct, get Bearer tocken
@@ -69,12 +69,10 @@ func parseBearerTocken(context *gin.Context) (*UserIdentity, error) {
 	payload = payloadArr[1]
 	// add "=" string to end base64 endcode
 	if coutEqualStr := len(payload) % 4; coutEqualStr != 0 {
-		//fmt.Println(4 - coutEqualStr)
 		for i := 0; i < (4 - coutEqualStr); i++ {
 			payload += "="
 		}
 	}
-
 	// decode base 64
 	payloadByte, err := base64.StdEncoding.DecodeString(payload)
 	if err != nil {
@@ -95,12 +93,12 @@ func parseBearerTocken(context *gin.Context) (*UserIdentity, error) {
 }
 
 func SetUserID(context *gin.Context) error {
-	UserIdentity ,err := parseBearerTocken(context)
+	UserIdentity, err := parseBearerTocken(context)
 	if err != nil {
 		return err
 	}
 
-	context.Set(common.HeaderUserID, UserIdentity)
+	context.Set(common.HeaderUserID, UserIdentity.UserID)
 	return nil
 }
 
