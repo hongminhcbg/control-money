@@ -1,12 +1,13 @@
 package services
 
 import (
+	"time"
+
 	"github.com/hongminhcbg/control-money/config"
 	"github.com/hongminhcbg/control-money/daos"
 	"github.com/hongminhcbg/control-money/dtos"
 	"github.com/hongminhcbg/control-money/middlewares"
 	"github.com/hongminhcbg/control-money/models"
-	"time"
 )
 
 type UserService interface {
@@ -15,6 +16,7 @@ type UserService interface {
 	CreateLog(log models.Log) (*models.Log, error)
 	GetAverageMonth(request dtos.AvrMoneyRequest) (*dtos.AvrMoneyResponse, error)
 	AnalysisByTag(userID int64, begin *time.Time, end *time.Time) (map[string]int64, error)
+	AnalysisByDay(userID int64, begin *time.Time, end *time.Time) (map[string]int64, error)
 }
 
 type userServiceImpl struct {
@@ -77,5 +79,24 @@ func (service *userServiceImpl) AnalysisByTag(userID int64, begin *time.Time, en
 			m[item.Tag] = item.Money
 		}
 	}
+	return m, nil
+}
+
+func (service *userServiceImpl) AnalysisByDay(userID int64, begin *time.Time, end *time.Time) (map[string]int64, error) {
+	logs, err := service.userDao.GetLog(userID, begin, end)
+	if err != nil {
+		return nil, err
+	}
+
+	m := make(map[string]int64)
+	for _, item := range logs {
+		timeStr := item.UpdateAt.Format("2006-01-02")
+		if val, ok := m[timeStr]; ok {
+			m[timeStr] = val + item.Money
+		} else {
+			m[timeStr] = item.Money
+		}
+	}
+
 	return m, nil
 }

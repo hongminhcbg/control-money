@@ -3,7 +3,7 @@
 # /api/v1/profile
     bref: create user
     method: POST
-    header:
+    header auth:
         api-key:controlnomey-hongminh-229297
     body:
         {
@@ -20,7 +20,7 @@
 # /api/v1/login
     bref: login to web
     method: POST
-    header:
+    header auth:
         api-key:controlnomey-hongminh-229297
     body:
         {
@@ -117,7 +117,7 @@
     }
 
 # /api/v1/average?month=1
-    bref: cacl average monney spend per day
+    bref: calc average monney spend per day
     method: GET
     param: 1 to 12
     auth: tocken
@@ -139,5 +139,6 @@
     - quần áo
     - tiền nhà
     - đồ dùng, đồ vệ sinh cá nhân
+    - đồ uống
     - khác
     

@@ -124,6 +124,33 @@ func (ctl *Controller)AnalysisByTag(context *gin.Context)  {
 	}
 }
 
+func (ctl *Controller)AnalysisByDay(context *gin.Context)  {
+	userID, err :=  utilitys.GetUserID(context)
+	if err != nil {
+		utilitys.ResponseError400(context, "get userID error")
+		return
+	}
+
+	beginTime, err := string2Time(context.Query(common.BeginTimeStampKey))
+	if err != nil {
+		utilitys.ResponseError400(context, "parse time error")
+		return
+	}
+
+	endTime, err := string2Time(context.Query(common.EndTimeStampKey))
+	if err != nil {
+		utilitys.ResponseError400(context, "parse time error")
+		return
+	}
+
+	data, err := ctl.userService.AnalysisByDay(userID, beginTime, endTime)
+	if err != nil {
+		utilitys.ResponseError400(context, err.Error())
+	} else {
+		utilitys.ResponseSuccess200(context, data, "success")
+	}
+}
+
 func (ctl *Controller) Ping(context *gin.Context) {
 	context.JSON(200, gin.H{
 		"message": "Pong",

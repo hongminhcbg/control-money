@@ -50,6 +50,7 @@ func (router *Router) InitGin() (*gin.Engine, error)  {
 		analysis.Use(jwt.Auth(router.config.SecretKet))
 		analysis.Use(middlewares.SetUserID)
 		analysis.GET("/tag", controller.AnalysisByTag)
+		analysis.GET("/day", controller.AnalysisByDay)
 	}
 
 	return engine, nil

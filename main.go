@@ -30,5 +30,5 @@ func main() {
 	}
 	router := rounters.NewRouter(&conf, db)
 	app, _ := router.InitGin()
-	app.Run(":8080")
+	_ = app.Run(":8080")
 }
