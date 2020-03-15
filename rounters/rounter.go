@@ -13,15 +13,14 @@ import (
 
 type Router struct {
 	config *config.Config
-	db *gorm.DB
+	db     *gorm.DB
 }
 
 func NewRouter(conf *config.Config, db *gorm.DB) Router {
-	return Router{config: conf, db:db}
+	return Router{config: conf, db: db}
 }
 
-func (router *Router) InitGin() (*gin.Engine, error)  {
-
+func (router *Router) InitGin() (*gin.Engine, error) {
 
 	providerService := services.NewProvider(router.config, router.db)
 	controller := controlers.NewController(providerService)
@@ -43,6 +42,7 @@ func (router *Router) InitGin() (*gin.Engine, error)  {
 		log.Use(jwt.Auth(router.config.SecretKet))
 		log.Use(middlewares.SetUserID)
 		log.POST("", controller.CreateLog)
+		log.GET("", controller.GetLogs)
 	}
 
 	{

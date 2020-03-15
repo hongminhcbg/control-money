@@ -47,7 +47,7 @@ func (dao *userDaoImpl) CreateLog(log models.Log) (*models.Log, error) {
 }
 
 func (dao *userDaoImpl) GetLog(userID int64, begin *time.Time, end *time.Time) ([]models.Log, error) {
-	logs := make([]models.Log, 10)
+	logs := make([]models.Log, 0)
 	if err := dao.db.Where("user_id = ? AND updated_at>? AND updated_at<?", userID,
 		begin.Format("2006-01-02 15:04:05"),
 		end.Format("2006-01-02 15:04:05")).Find(&logs).Error; err != nil {

@@ -17,6 +17,7 @@ type UserService interface {
 	GetAverageMonth(request dtos.AvrMoneyRequest) (*dtos.AvrMoneyResponse, error)
 	AnalysisByTag(userID int64, begin *time.Time, end *time.Time) (map[string]int64, error)
 	AnalysisByDay(userID int64, begin *time.Time, end *time.Time) (map[string]int64, error)
+	GetLogsByTime(userID int64, begin *time.Time, end *time.Time) ([]models.Log, error)
 }
 
 type userServiceImpl struct {
@@ -99,4 +100,8 @@ func (service *userServiceImpl) AnalysisByDay(userID int64, begin *time.Time, en
 	}
 
 	return m, nil
+}
+
+func (service *userServiceImpl) GetLogsByTime(userID int64, begin *time.Time, end *time.Time) ([]models.Log, error) {
+	return service.userDao.GetLog(userID, begin, end)
 }

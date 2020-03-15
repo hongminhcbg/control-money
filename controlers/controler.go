@@ -87,7 +87,34 @@ func (ctl *Controller) CreateLog(context *gin.Context) {
 
 }
 
-func string2Time(input string) (*time.Time, error)  {
+func (ctl *Controller) GetLogs(context *gin.Context) {
+	userID, err := utilitys.GetUserID(context)
+	if err != nil {
+		utilitys.ResponseError400(context, "get userID error")
+		return
+	}
+
+	beginTime, err := string2Time(context.Query(common.BeginTimeStampKey))
+	if err != nil {
+		utilitys.ResponseError400(context, "parse time error")
+		return
+	}
+
+	endTime, err := string2Time(context.Query(common.EndTimeStampKey))
+	if err != nil {
+		utilitys.ResponseError400(context, "parse time error")
+		return
+	}
+
+	data, err := ctl.userService.GetLogsByTime(userID, beginTime, endTime)
+	if err != nil {
+		utilitys.ResponseError400(context, err.Error())
+	} else {
+		utilitys.ResponseSuccess200(context, data, "success")
+	}
+}
+
+func string2Time(input string) (*time.Time, error) {
 	timeSecondInt, err := strconv.Atoi(input)
 	if err != nil {
 		return nil, err
@@ -97,8 +124,8 @@ func string2Time(input string) (*time.Time, error)  {
 	return &t, err
 }
 
-func (ctl *Controller)AnalysisByTag(context *gin.Context)  {
-	userID, err :=  utilitys.GetUserID(context)
+func (ctl *Controller) AnalysisByTag(context *gin.Context) {
+	userID, err := utilitys.GetUserID(context)
 	if err != nil {
 		utilitys.ResponseError400(context, "get userID error")
 		return
@@ -124,8 +151,8 @@ func (ctl *Controller)AnalysisByTag(context *gin.Context)  {
 	}
 }
 
-func (ctl *Controller)AnalysisByDay(context *gin.Context)  {
-	userID, err :=  utilitys.GetUserID(context)
+func (ctl *Controller) AnalysisByDay(context *gin.Context) {
+	userID, err := utilitys.GetUserID(context)
 	if err != nil {
 		utilitys.ResponseError400(context, "get userID error")
 		return
