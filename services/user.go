@@ -14,7 +14,7 @@ type UserService interface {
 	Login(request dtos.LoginRequest) (*dtos.LoginResponse, error)
 	Create(user models.User) (*models.User, error)
 	CreateLog(log models.Log) (*models.Log, error)
-	GetAverageMonth(request dtos.AvrMoneyRequest) (*dtos.AvrMoneyResponse, error)
+	//GetAverageMonth(request dtos.AvrMoneyPerMonthRequest) (*dtos.AvrMoneyPerMonthResponse, error)
 	AnalysisByTag(userID int64, begin *time.Time, end *time.Time) (map[string]int64, error)
 	AnalysisByDay(userID int64, begin *time.Time, end *time.Time) (map[string]int64, error)
 	GetLogsByTime(userID int64, begin *time.Time, end *time.Time) ([]models.Log, error)
@@ -62,9 +62,9 @@ func (service *userServiceImpl) CreateLog(log models.Log) (*models.Log, error) {
 	return service.userDao.CreateLog(log)
 }
 
-func (service *userServiceImpl) GetAverageMonth(request dtos.AvrMoneyRequest) (*dtos.AvrMoneyResponse, error) {
-	return nil, nil
-}
+//func (service *userServiceImpl) GetAverageMonth(request dtos.AvrMoneyPerMonthRequest) (*dtos.AvrMoneyPerMonthResponse, error) {
+//	return nil, nil
+//}
 
 func (service *userServiceImpl) AnalysisByTag(userID int64, begin *time.Time, end *time.Time) (map[string]int64, error) {
 	logs, err := service.userDao.GetLog(userID, begin, end)

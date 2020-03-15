@@ -10,6 +10,7 @@ import (
 type Provider interface {
 	GetUserService() UserService
 	GetAnalysisService() AnalysisService
+	GetAverageService() AverageService
 }
 
 type providerImpl struct {
@@ -21,6 +22,11 @@ func (provider *providerImpl) GetUserService() UserService {
 	userDao := daos.NewUserDao(provider.db)
 	jwtClient := middlewares.NewJWT(provider.config.SecretKet)
 	return NewUserService(provider.config, userDao, jwtClient)
+}
+
+func (provider *providerImpl) GetAverageService() AverageService {
+	userDao := daos.NewUserDao(provider.db)
+	return NewAverageService(userDao)
 }
 
 func (provider *providerImpl) GetAnalysisService() AnalysisService {

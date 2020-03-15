@@ -54,7 +54,7 @@
             "tag":"abc"
         } 
 
-# /api/v1/analysis/tag?begin=123&end=456
+# /api/v1/analysis/tag?begin=YYYY-MM-DD&end=YYYY-MM-DD
     bref: analysis monney depend on tag, param require Unix timestamp second
     method: GET
     auth: tocken
@@ -83,7 +83,7 @@
         }
     }
     
-# /api/v1/analysis/day?begin=123&end=456
+# /api/v1/analysis/day?begin=YYYY-MM-DD&end=YYYY-MM-DD
     bref: analysis monney depend on day, param require Unix timestamp second
     method: GET
     auth: tocken
@@ -116,7 +116,7 @@
         }        
     }
 
-# /api/v1/average?month=1
+# /api/v1/average/day?begin=YYYY-MM-DD&end=YYYY-MM-DD
     bref: calc average monney spend per day
     method: GET
     param: 1 to 12
@@ -124,7 +124,7 @@
     response:
         {
             "data":{
-                "average": 100
+                "money_spend_per_day": 100
             },
             "meta_data": {
                 "code": "200",

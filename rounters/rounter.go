@@ -53,5 +53,12 @@ func (router *Router) InitGin() (*gin.Engine, error) {
 		analysis.GET("/day", controller.AnalysisByDay)
 	}
 
+	{
+		avg := engine.Group("/api/v1/average")
+		avg.Use(jwt.Auth(router.config.SecretKet))
+		avg.Use(middlewares.SetUserID)
+		avg.GET("day", controller.GetAverageByDay)
+	}
+
 	return engine, nil
 }

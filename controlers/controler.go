@@ -3,7 +3,6 @@ package controlers
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/hongminhcbg/control-money/common"
-	"strconv"
 	"time"
 
 	"github.com/hongminhcbg/control-money/dtos"
@@ -14,10 +13,12 @@ import (
 
 type Controller struct {
 	userService services.UserService
+	avrService  services.AverageService
 }
 
 func NewController(provider services.Provider) Controller {
-	return Controller{userService: provider.GetUserService(),}
+	return Controller{userService: provider.GetUserService(),
+		avrService: provider.GetAverageService()}
 }
 
 func (ctl *Controller) Login(context *gin.Context) {
@@ -66,7 +67,7 @@ func (ctl *Controller) CreateLog(context *gin.Context) {
 
 	var logRequest dtos.CreateLogRequest
 	err = context.ShouldBindJSON(&logRequest)
-	if err != nil {
+	if err != nil || logRequest.Money <= 0 {
 		utilitys.ResponseError400(context, "json decode error")
 		return
 	}
@@ -94,15 +95,15 @@ func (ctl *Controller) GetLogs(context *gin.Context) {
 		return
 	}
 
-	beginTime, err := string2Time(context.Query(common.BeginTimeStampKey))
+	beginTime, err := stringYYYYMMDD2Time(context.Query(common.BeginTimeStampKey))
 	if err != nil {
-		utilitys.ResponseError400(context, "parse time error")
+		utilitys.ResponseError400(context, "input format YYYY-MM-DD")
 		return
 	}
 
-	endTime, err := string2Time(context.Query(common.EndTimeStampKey))
+	endTime, err := stringYYYYMMDD2Time(context.Query(common.EndTimeStampKey))
 	if err != nil {
-		utilitys.ResponseError400(context, "parse time error")
+		utilitys.ResponseError400(context, "input format YYYY-MM-DD")
 		return
 	}
 
@@ -110,18 +111,19 @@ func (ctl *Controller) GetLogs(context *gin.Context) {
 	if err != nil {
 		utilitys.ResponseError400(context, err.Error())
 	} else {
+
 		utilitys.ResponseSuccess200(context, data, "success")
 	}
 }
 
-func string2Time(input string) (*time.Time, error) {
-	timeSecondInt, err := strconv.Atoi(input)
+func stringYYYYMMDD2Time(input string) (*time.Time, error) {
+	layout := "2006-01-02"
+	result, err := time.Parse(layout,input)
 	if err != nil {
 		return nil, err
 	}
 
-	t := time.Unix(int64(timeSecondInt), 0)
-	return &t, err
+	return &result, nil
 }
 
 func (ctl *Controller) AnalysisByTag(context *gin.Context) {
@@ -131,15 +133,15 @@ func (ctl *Controller) AnalysisByTag(context *gin.Context) {
 		return
 	}
 
-	beginTime, err := string2Time(context.Query(common.BeginTimeStampKey))
+	beginTime, err := stringYYYYMMDD2Time(context.Query(common.BeginTimeStampKey))
 	if err != nil {
-		utilitys.ResponseError400(context, "parse time error")
+		utilitys.ResponseError400(context, "input format YYYY-MM-DD")
 		return
 	}
 
-	endTime, err := string2Time(context.Query(common.EndTimeStampKey))
+	endTime, err := stringYYYYMMDD2Time(context.Query(common.EndTimeStampKey))
 	if err != nil {
-		utilitys.ResponseError400(context, "parse time error")
+		utilitys.ResponseError400(context, "input format YYYY-MM-DD")
 		return
 	}
 
@@ -158,15 +160,15 @@ func (ctl *Controller) AnalysisByDay(context *gin.Context) {
 		return
 	}
 
-	beginTime, err := string2Time(context.Query(common.BeginTimeStampKey))
+	beginTime, err := stringYYYYMMDD2Time(context.Query(common.BeginTimeStampKey))
 	if err != nil {
-		utilitys.ResponseError400(context, "parse time error")
+		utilitys.ResponseError400(context, "input format YYYY-MM-DD")
 		return
 	}
 
-	endTime, err := string2Time(context.Query(common.EndTimeStampKey))
+	endTime, err := stringYYYYMMDD2Time(context.Query(common.EndTimeStampKey))
 	if err != nil {
-		utilitys.ResponseError400(context, "parse time error")
+		utilitys.ResponseError400(context, "input format YYYY-MM-DD")
 		return
 	}
 
@@ -174,7 +176,35 @@ func (ctl *Controller) AnalysisByDay(context *gin.Context) {
 	if err != nil {
 		utilitys.ResponseError400(context, err.Error())
 	} else {
-		utilitys.ResponseSuccess200(context, data, "success")
+		utilitys.ResponseSuccess200(context, data, "input format YYYY-MM-DD")
+	}
+}
+
+func (ctl *Controller)GetAverageByDay(context *gin.Context)  {
+	userID, err := utilitys.GetUserID(context)
+	if err != nil {
+		utilitys.ResponseError400(context, "get userID error")
+		return
+	}
+
+	beginTime, err := stringYYYYMMDD2Time(context.Query(common.BeginTimeStampKey))
+	if err != nil {
+		utilitys.ResponseError400(context, "input format YYYY-MM-DD")
+		return
+	}
+
+	endTime, err := stringYYYYMMDD2Time(context.Query(common.EndTimeStampKey))
+	if err != nil {
+		utilitys.ResponseError400(context, "input format YYYY-MM-DD")
+		return
+	}
+
+	money, err := ctl.avrService.CalculateByDay(userID, beginTime, endTime)
+	if err != nil {
+		utilitys.ResponseError400(context, err.Error())
+	} else {
+		result := dtos.AverageMoneyPerDayResponse{Money: money}
+		utilitys.ResponseSuccess200(context, result, "success")
 	}
 }
 
