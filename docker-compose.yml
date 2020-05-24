@@ -1,0 +1,38 @@
+version: "3.4"
+services:
+  backend:
+    build:
+      context: "./"
+      dockerfile: "./Dockerfile"
+      cache_from:
+        - ubuntu:16.04
+        - golang:1.12
+    depends_on:
+      - mysql
+    image: control-money:v1.0.0
+    ports:
+      - "8080:80"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/ping"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    environment:
+      - MYSQL_URL=root:bW90aGVyIGZ1Y2tlciBub29i@tcp(mysql:3306)/cm?charset=utf8mb4&collation=utf8mb4_unicode_ci&parseTime=True&loc=Local
+      - API_KEY=hongminh229297
+      - SECRET_KEY=hongminh229297
+  mysql:
+    image: mysql:5.7
+    container_name: mysql-cm
+    volumes:
+    - db_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: bW90aGVyIGZ1Y2tlciBub29i
+      MYSQL_DATABASE: cm
+      MYSQL_USER: user1
+      MYSQL_PASSWORD: 1
+volumes:
+  db_data:
