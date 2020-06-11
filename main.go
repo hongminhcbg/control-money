@@ -6,7 +6,7 @@ import (
 	"github.com/kelseyhightower/envconfig"
 
 	"github.com/hongminhcbg/control-money/config"
-	"github.com/hongminhcbg/control-money/rounters"
+	"github.com/hongminhcbg/control-money/routers"
 )
 
 func main() {
@@ -28,7 +28,7 @@ func main() {
 	if err := db.DB().Ping(); err != nil {
 		panic("ping db error: " + err.Error())
 	}
-	router := rounters.NewRouter(&conf, db)
+	router := routers.NewRouter(&conf, db)
 	app, _ := router.InitGin()
 	_ = app.Run(":80")
 }

@@ -1,10 +1,11 @@
-package controlers
+package controllers
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/hongminhcbg/control-money/common"
 	"time"
 
+	"github.com/gin-gonic/gin"
+
+	"github.com/hongminhcbg/control-money/common"
 	"github.com/hongminhcbg/control-money/dtos"
 	"github.com/hongminhcbg/control-money/models"
 	"github.com/hongminhcbg/control-money/services"

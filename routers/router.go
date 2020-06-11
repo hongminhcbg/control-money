@@ -1,4 +1,4 @@
-package rounters
+package routers
 
 import (
 	"github.com/gin-gonic/contrib/jwt"
@@ -6,7 +6,7 @@ import (
 	"github.com/jinzhu/gorm"
 
 	"github.com/hongminhcbg/control-money/config"
-	"github.com/hongminhcbg/control-money/controlers"
+	"github.com/hongminhcbg/control-money/controllers"
 	"github.com/hongminhcbg/control-money/middlewares"
 	"github.com/hongminhcbg/control-money/services"
 )
@@ -23,7 +23,7 @@ func NewRouter(conf *config.Config, db *gorm.DB) Router {
 func (router *Router) InitGin() (*gin.Engine, error) {
 
 	providerService := services.NewProvider(router.config, router.db)
-	controller := controlers.NewController(providerService)
+	controller := controllers.NewController(providerService)
 
 	engine := gin.Default()
 	engine.Use(middlewares.CORSMiddleware())
