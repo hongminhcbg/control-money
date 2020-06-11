@@ -13,7 +13,7 @@ services:
     ports:
       - "8080:80"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/ping"]
+      test: ["CMD", "curl", "-X", "GET", "http://localhost/ping"]
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -36,3 +36,5 @@ services:
       MYSQL_PASSWORD: 1
 volumes:
   db_data:
+    name: controlmoney_db_data
+    external: true

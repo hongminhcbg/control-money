@@ -1,7 +1,7 @@
 ### control-money
 ## How to run this example
     step 1: create volume
-        $ docker volume create db_data
+        $ docker volume create controlmoney_db_data
     step 2: run two containers with docker compose
         $ docker-compose up
     step 3: data base migration

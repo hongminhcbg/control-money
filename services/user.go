@@ -39,7 +39,7 @@ func (service *userServiceImpl) Login(request dtos.LoginRequest) (*dtos.LoginRes
 		return nil, err
 	}
 
-	tocken, err := service.jwt.CreateTocken(user.ID)
+	tocken, err := service.jwt.CreateToken(user.ID)
 	if err != nil {
 		return nil, err
 	}

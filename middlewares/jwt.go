@@ -3,11 +3,11 @@ package middlewares
 import (
 	"time"
 
-	jwt_lib "github.com/dgrijalva/jwt-go"
+	jwtLib "github.com/dgrijalva/jwt-go"
 )
 
 type JWT interface {
-	CreateTocken(id int64) (string, error)
+	CreateToken(id int64) (string, error)
 }
 
 type jwtImpl struct {
@@ -18,10 +18,10 @@ func NewJWT(secretKey string) JWT {
 	return &jwtImpl{secretKey: secretKey}
 }
 
-func (c *jwtImpl) CreateTocken(id int64) (string, error) {
-	token := jwt_lib.New(jwt_lib.GetSigningMethod("HS256"))
+func (c *jwtImpl) CreateToken(id int64) (string, error) {
+	token := jwtLib.New(jwtLib.GetSigningMethod("HS256"))
 
-	token.Claims = jwt_lib.MapClaims{
+	token.Claims = jwtLib.MapClaims{
 		"id":  id,
 		"exp": time.Now().Add(time.Hour * 24).Unix(),
 	}
