@@ -17,7 +17,7 @@ type LoginResponse struct {
 	UserID   int64  `json:"id"`
 	Username string `json:"username"`
 	Name     string `json:"full_name"`
-	Tocken   string `json:"tocken"`
+	Token    string `json:"token"`
 	Money    int64  `json:"money"`
 }
 

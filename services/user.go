@@ -27,7 +27,8 @@ type userServiceImpl struct {
 }
 
 func NewUserService(conf *config.Config, userDao daos.UserDao, jwt middlewares.JWT) UserService {
-	return &userServiceImpl{config: conf,
+	return &userServiceImpl{
+		config: conf,
 		userDao: userDao,
 		jwt:     jwt,
 	}
@@ -39,7 +40,7 @@ func (service *userServiceImpl) Login(request dtos.LoginRequest) (*dtos.LoginRes
 		return nil, err
 	}
 
-	tocken, err := service.jwt.CreateToken(user.ID)
+	token, err := service.jwt.CreateToken(user.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +49,7 @@ func (service *userServiceImpl) Login(request dtos.LoginRequest) (*dtos.LoginRes
 		UserID:   user.ID,
 		Username: user.Username,
 		Name:     user.Name,
-		Tocken:   tocken,
+		Token:    token,
 		Money:    user.Money,
 	}
 	return &response, nil
@@ -61,10 +62,6 @@ func (service *userServiceImpl) Create(user models.User) (*models.User, error) {
 func (service *userServiceImpl) CreateLog(log models.Log) (*models.Log, error) {
 	return service.userDao.CreateLog(log)
 }
-
-//func (service *userServiceImpl) GetAverageMonth(request dtos.AvrMoneyPerMonthRequest) (*dtos.AvrMoneyPerMonthResponse, error) {
-//	return nil, nil
-//}
 
 func (service *userServiceImpl) AnalysisByTag(userID int64, begin *time.Time, end *time.Time) (map[string]int64, error) {
 	logs, err := service.userDao.GetLog(userID, begin, end)
