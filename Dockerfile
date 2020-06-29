@@ -1,6 +1,4 @@
-FROM golang:1.12 as builder
-
-MAINTAINER LHM <cbg.hongminh@gmail.com>
+FROM golang:1.14 as builder
 
 WORKDIR /app
 

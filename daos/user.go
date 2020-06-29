@@ -1,10 +1,12 @@
 package daos
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/jinzhu/gorm"
 
+	"github.com/hongminhcbg/control-money/bcrypt"
 	"github.com/hongminhcbg/control-money/models"
 )
 
@@ -17,22 +19,30 @@ type UserDao interface {
 }
 
 type userDaoImpl struct {
-	db *gorm.DB
+	db           *gorm.DB
+	bcryptClient bcrypt.BcryptClient
 }
 
 func NewUserDao(db *gorm.DB) UserDao {
-	return &userDaoImpl{db: db}
+	bcryptClient := bcrypt.NewBcryptClient()
+	return &userDaoImpl{db: db, bcryptClient: bcryptClient}
 }
 
 func (dao *userDaoImpl) Login(userName, pass string) (*models.User, error) {
 	var user models.User
-	if err := dao.db.Where("username = ? AND password = ?", userName, pass).First(&user).Error; err != nil {
+	if err := dao.db.Where("username = ?", userName).First(&user).Error; err != nil {
 		return nil, err
+	}
+
+	if !dao.bcryptClient.IsMatchingHashAndPassword([]byte(user.Password), []byte(pass)) {
+		return nil, fmt.Errorf("not matching password")
 	}
 	return &user, nil
 }
 
 func (dao *userDaoImpl) Create(user models.User) (*models.User, error) {
+	pwBytes, _ := dao.bcryptClient.GenerateFromPassword([]byte(user.Password), 14)
+	user.Password = string(pwBytes)
 	if err := dao.db.Create(&user).Error; err != nil {
 		return nil, err
 	}
