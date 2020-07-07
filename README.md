@@ -9,7 +9,7 @@
         - create mysql table by copy file scripts/log.sql and scripts/user.sql, paste to mysql terminal
 
 ## API   
-# /api/v1/profile
+# /api/v1/account
     bref: create user
     method: POST
     header auth:
@@ -26,7 +26,7 @@
             "message":"success"
         }
 
-# /api/v1/login
+# /api/v1/account/login
     bref: login to web
     method: POST
     header auth:
@@ -150,4 +150,4 @@
     - đồ dùng, đồ vệ sinh cá nhân
     - đồ uống
     - khác
-    
+## Note: bcrypt is fucking bullshit solution store password, should use OTP to verify user, if you not enough money, use should save real password in db
