@@ -1,5 +1,14 @@
 version: "3.4"
 services:
+  migrate_db:
+    depends_on:
+      - mysql
+    build:
+      context: "./"
+      dockerfile: "./Dockerfile_migrate"
+    environment:
+      DATABASE: mysql://root:bW90aGVyIGZ1Y2tlciBub29i@tcp(mysql:3306)/cm?charset=utf8mb4&collation=utf8mb4_unicode_ci&parseTime=True&loc=Local
+
   backend:
     build:
       context: "./"
@@ -9,6 +18,7 @@ services:
         - golang:1.12
     depends_on:
       - mysql
+      - migrate_db
     image: control-money:v1.0.0
     ports:
       - "8080:80"

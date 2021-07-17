@@ -1,0 +1,7 @@
+FROM alpine:3.14
+WORKDIR /app
+COPY ./migrations/ /app/migrations/
+RUN apk --no-cache add curl
+RUN curl -L https://github.com/golang-migrate/migrate/releases/download/v4.14.0/migrate.linux-amd64.tar.gz | tar xvz
+RUN mv ./migrate.linux-amd64 /bin/migrate
+CMD sleep 10 && migrate -path /app/migrations -database "$DATABASE" up
