@@ -4,9 +4,6 @@
         $ docker volume create controlmoney_db_data
     step 2: run two containers with docker compose
         $ docker-compose up
-    step 3: data base migration
-        - login mysql container with user: root, password: bW90aGVyIGZ1Y2tlciBub29i
-        - create mysql table by copy file scripts/log.sql and scripts/user.sql, paste to mysql terminal
 
 ## API   
 # /api/v1/account
